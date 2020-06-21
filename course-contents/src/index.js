@@ -7,10 +7,10 @@ const Header = ({ text }) => {
   )
 }
 
-const Total = ({ course }) => {
-  const sum = course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises
+const Total = ({ parts }) => {
+  const sum = parts.reduce((total, {exercises}) => total + exercises,0)
   return(
-    <p>Number of exercises {sum}</p>
+    <p><strong>total of {sum} exercises </strong></p>
   ) 
 }
 
@@ -46,6 +46,7 @@ const Course = ({course}) => {//how to decompose object in prop?
     <div>
       <Header text={name} />
       <Content parts={parts} />
+      <Total parts={parts} />
     </div>
   )
 }
