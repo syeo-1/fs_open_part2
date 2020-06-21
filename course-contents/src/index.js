@@ -1,61 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-const Header = ({ text }) => {
-  return (
-    <h1>{text}</h1>
-  )
-}
-
-const Total = ({ parts }) => {//used reduce
-  const sum = parts.reduce((total, {exercises}) => total + exercises,0)
-  return(
-    <p><strong>total of {sum} exercises </strong></p>
-  ) 
-}
-
-const Part = (props) => {
-  return (
-    <p>
-      {props.part.name} {props.part.exercises}
-    </p>    
-  )
-}
-
-const Content = ({ parts }) => {
-  return (
-    <div>
-      {parts.map(part => 
-        <p key={part.id}>
-          {part.name} {part.exercises}
-        </p>)}
-    </div>
-  )
-}
-
-const Course = ({course}) => {//how to decompose object in prop?
-  //should I decompose object in prop? bad practice?
-  const {id, name, parts} = course
-  console.log("id", id);
-  console.log("name", name);
-  console.log("parts", parts);
-  
-  
-  
-  return (
-    <div>
-      <Header text={name} />
-      <Content parts={parts} />
-      <Total parts={parts} />
-    </div>
-  )
-}
+import Course from './components/Course'
 
 const Courses = ({courses}) => {
   return (
     <div>
       {courses.map(course =>
-        <Course course={course} />
+        <Course key={course.id} course={course} />
       )}
     </div>
   )
