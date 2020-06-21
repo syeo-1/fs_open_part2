@@ -25,12 +25,10 @@ const Part = (props) => {
 const Content = ({ parts }) => {
   return (
     <div>
-      <ul>
-        {parts.map(part => 
-          <li key={part.id}>
-            {part.name}
-          </li>)}
-      </ul>
+      {parts.map(part => 
+        <p key={part.id}>
+          {part.name} {part.exercises}
+        </p>)}
     </div>
   )
 }
