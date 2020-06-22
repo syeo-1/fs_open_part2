@@ -4,7 +4,7 @@ const Numbers = ({persons}) => {
   return (
     persons.map(person =>
       <p key={person.name}>
-        {person.name}
+        {person.name} {person.number}
       </p>
     )
   )
@@ -13,13 +13,14 @@ const Numbers = ({persons}) => {
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
   const [ newName, setNewName ] = useState('')
+  const [newNumber, setNewNumber] = useState('')
 
-  const addName = (event) => {
+  const addData = (event) => {
     event.preventDefault()
     //console.log('button click', event.target);
     const nameObject = {
       name: newName,
-      //id: persons.length + 1,
+      number: newNumber,
     }
     // can't compare objects directly in JS!!!
     // can use JSON.stringify if you really want to use includes/some methods
@@ -37,6 +38,7 @@ const App = () => {
 
 
     setNewName('')
+    setNewNumber('')
   }
   
   const handleNewName = (event) => {
@@ -44,12 +46,19 @@ const App = () => {
     setNewName(event.target.value)
   }
   
+  const handleNewNumber = (event) => {
+    setNewNumber(event.target.value)
+  }
+  
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addName}>
+      <form onSubmit={addData}>
         <div>
           name: <input value={newName} onChange={handleNewName}/>
+        </div>
+        <div>
+          number: <input value={newNumber} onChange={handleNewNumber}/>
         </div>
         <div>
           <button type="submit">add</button>
