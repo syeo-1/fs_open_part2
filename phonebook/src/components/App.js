@@ -21,13 +21,26 @@ const App = () => {
       name: newName,
       //id: persons.length + 1,
     }
+    // can't compare objects directly in JS!!!
+    // can use JSON.stringify if you really want to use includes/some methods
 
-    setPersons(persons.concat(nameObject))
+    let alreadyInPersons = false
+    for (let i = 0 ; i < persons.length ; i++) {      
+      if (nameObject.name === persons[i].name) {
+        alreadyInPersons = true
+      }
+    }
+
+    !alreadyInPersons
+     ? setPersons(persons.concat(nameObject))
+     : alert(`${nameObject.name} is already added to phonebook`)
+
+
     setNewName('')
   }
   
   const handleNewName = (event) => {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     setNewName(event.target.value)
   }
   
