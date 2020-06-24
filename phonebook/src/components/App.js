@@ -1,6 +1,28 @@
 import React, { useState } from 'react'
 
-const Numbers = ({persons}) => {
+const Filter = ({searchString, handleSearchString}) => (
+  <form>
+    <div>
+      filter shown with <input value={searchString} onChange={handleSearchString}/>
+    </div>
+  </form>
+)
+
+const PersonForm = ({addData, newName, newNumber, handleNewName, handleNewNumber}) => (
+    <form onSubmit={addData}>
+      <div>
+        name: <input value={newName} onChange={handleNewName}/>
+      </div>
+      <div>
+        number: <input value={newNumber} onChange={handleNewNumber}/>
+      </div>
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </form>
+)
+
+const Persons = ({persons}) => {
   return (
     persons.map(person =>
       <p key={person.name}>
@@ -73,29 +95,22 @@ const App = () => {
     // setPersons(personsToShow)
   }
   
-
+  // be aware that var on left of equals (eg. searchString) is the prop var
+  // and the value it is being set to is the searchString in App component
   return (
     <div>
       <h2>Phonebook</h2>
-      <form>
-        <div>
-          filter shown with <input value={searchString} onChange={handleSearchString}/>
-        </div>
-      </form>
+      <Filter searchString={searchString} handleSearchString={handleSearchString}/>
       <h2>add a new</h2>
-      <form onSubmit={addData}>
-        <div>
-          name: <input value={newName} onChange={handleNewName}/>
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNewNumber}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm 
+        addData={addData}
+        newName={newName}
+        newNumber={newNumber}
+        handleNewName={handleNewName}
+        handleNewNumber={handleNewNumber}
+      />
       <h2>Numbers</h2>
-      <Numbers persons={personsToShow}/>
+      <Persons persons={personsToShow}/>
     </div>
   )
 }
