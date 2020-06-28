@@ -34,7 +34,13 @@ const CountryData = ({countryNames, countries}) => {
     )
   } else if (countryNames.length <= 10 && countryNames.length > 1) {
     return (
-      countryNames.map(country => <p key={country}>{country}</p>)
+        countryNames.map(country => {
+          return(
+            <div>
+              {country}
+              <button>show</button>
+            </div>
+        )})
     )
   } else if (countryNames.length > 10) {
     return (
