@@ -11,83 +11,77 @@ const CountryFilter = ({countryString, handleCountrySearch, numMatches}) => {
   )
 }
 
-const CountryData = ({countries}) => {
-  if (countries.length === 1) {
+
+
+const CountryData = ({countryNames, countries}) => {
+  if (countryNames.length === 1) {
+    const countryData = countries.filter(country => country.name === countryNames[0])[0]
+    console.log('countryData', countryData);
+    
     return (
-      <p>match found: {countries[0]}</p>
+        <div>
+          <h1>{countryData.name}</h1>
+          <p>capital {countryData.capital}</p>
+          <p>population {countryData.population}</p>
+          <h2>languages</h2>
+          <ul>
+            {countryData.languages.map(language => (
+              <li key={language.name}>{language.name}</li>
+            ))}
+          </ul>
+          <img src={`${countryData.flag}`} alt={`${countryData.name}'s flag`} width="300px" height="300px"/>
+        </div>
     )
-  } else if (countries.length <= 10) {
+  } else if (countryNames.length <= 10 && countryNames.length > 1) {
     return (
-      countries.map(country => <p key={country}>{country}</p>)
+      countryNames.map(country => <p key={country}>{country}</p>)
     )
-  } else if (countries.length > 10) {
+  } else if (countryNames.length > 10) {
     return (
       <p>Too many matches, specify another filter</p>
     )
   }
   return (
     <div>
-      <p>please enter a search</p>
+      {/* <p>please enter a search</p> */}
     </div>
   )
 }
 
 const App = () => {
   const [countries, setCountries] = useState([])
-  // [
-  //   'Botswana',
-  //   'Swaziland',
-  //   'Sweden',
-  //   'Switzerland',
-  //   'Canada',
-  //   'Singapore',
-  //   'Japan',
-  //   'France',
-  //   'Spain',
-  //   'Brazil',
-  //   'Greece',
-  //   'America',
-  //   'Mexico',
-  //   'Finland',
-  //   'Argentina',
-  //   'India',
-  //   'Vietnam',
-  //   'Italy',
-  //   'Portugal',
-  //   'Egypt',
-  //   'Saudi Arabia',
-  //   'Israel',
-  //   'Madegascar',
-  // ]
+  const [countryNames, setCountryNames] = useState([])
   useEffect(() => {
-    console.log("effect");
+    // console.log("effect");
     axios
       .get('https://restcountries.eu/rest/v2/all')
       .then(response => {
-        console.log("promise fulfilled");
-        const countryNames = response.data.map(data => (
-          data.name
-        ))
+        // console.log("promise fulfilled");
+        // const countryNames = response.data.map(data => (
+        //   data.name
+        // ))
         // console.log(response.data);
         
         // const countryNames = response.data.map(countryData => {
         //   countryData.name
         // })
         
-        setCountries(countryNames)
+        setCountries(response.data)
+        setCountryNames(response.data.map(data => (data.name)))
       })
   }, [])
   const [searchString, setSearchString] = useState('')
+  
   // don't care about which of 4 states to be in for display
   // all you need to care about is the length of countries
   // after filtering
 
   // only filter when there's something in the form
-  const [filterCountries, setFilterCountries] = useState(false)
-  const countriesToShow = filterCountries
-    ? countries.filter(country => country.toLowerCase().includes(searchString))
-    : countries
-  console.log("data", countriesToShow);
+  const [filterCountryNames, setFilterCountries] = useState(false)
+  const countryNamesToShow = filterCountryNames
+    ? countryNames.filter(country => country.toLowerCase().includes(searchString))
+    : countryNames
+  // console.log("data", countriesToShow);
   const handleCountrySearch = (event) => {
     // console.log(event.target.value);
     
@@ -100,8 +94,10 @@ const App = () => {
 
   return (
     <div>
-      <CountryFilter countryString={searchString} handleCountrySearch={handleCountrySearch}/>
-      <CountryData countries={countriesToShow}/>
+      <CountryFilter countryString={searchString}
+      handleCountrySearch={handleCountrySearch}
+      />
+      <CountryData countryNames={countryNamesToShow} countries={countries}/>
     </div>
   )
 }
