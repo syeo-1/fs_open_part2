@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from './persons'
 
 const Filter = ({searchString, handleSearchString}) => (
   <form>
@@ -42,8 +42,8 @@ const App = () => {
 
   useEffect(() => {
     // console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
+    personService
+      .getAllPersons()
       .then(response => {
         setPersons(response.data)
       })
@@ -57,9 +57,10 @@ const App = () => {
       name: newName,
       number: newNumber,
     }
-    axios.post('http://localhost:3001/persons', nameObject)
+    personService
+      .addPerson(nameObject)
       .then(response => {
-        console.log(response);
+        // console.log(response);
       })
 
     // can't compare objects directly in JS!!!
@@ -94,6 +95,8 @@ const App = () => {
   const personsToShow = filterNumbers 
     ? persons.filter(person => person.name.toLowerCase().includes(searchString))
     : persons 
+  // console.log(persons);
+  
   const handleSearchString = (event) => {
     // console.log(event.target.value);
     setSearchString(event.target.value)
