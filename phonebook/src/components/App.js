@@ -41,14 +41,14 @@ const App = () => {
   const [searchString, setSearchString] = useState('')
 
   useEffect(() => {
-    console.log('effect')
+    // console.log('effect')
     axios
       .get('http://localhost:3001/persons')
       .then(response => {
         setPersons(response.data)
       })
   }, [])
-  console.log('render', persons.length, 'persons')
+  // console.log('render', persons.length, 'persons')
 
   const addData = (event) => {
     event.preventDefault()
@@ -57,6 +57,11 @@ const App = () => {
       name: newName,
       number: newNumber,
     }
+    axios.post('http://localhost:3001/persons', nameObject)
+      .then(response => {
+        console.log(response);
+      })
+
     // can't compare objects directly in JS!!!
     // can use JSON.stringify if you really want to use includes/some methods
 
