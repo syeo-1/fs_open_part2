@@ -79,7 +79,18 @@ const App = () => {
       // console.log("persons:", persons)
       // console.log("hey")
     } else {
-      alert(`${nameObject.name} is already added to phonebook`)
+      if (window.confirm(`${nameObject.name} is already added to phonebook. Replace the old number with a new one?`)) {
+        // find the correct id to update
+        // console.log(persons);
+        const idToUpdate = persons.find(person => person.name === nameObject.name).id
+        // console.log(idToUpdate);
+        personService.update(idToUpdate, nameObject)
+          .then(response => {
+            // console.log(response.data);
+            setPersons(persons
+              .map(person => person.id === idToUpdate ? response.data : person))
+          })
+      }
     }
 
     setNewName('')
