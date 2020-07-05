@@ -116,23 +116,9 @@ const App = () => {
     if (window.confirm(`Delete ${name} ?`)) {
       personService.deletePerson(id)
       setPersons(persons.filter(person => person.id !== id))
-      // personService
-      //   .deletePerson(id)
-      //   .then(response => {
-      //     console.log("response data:", response.data)
-      //     setPersons(response.data)
-      //   })
-        // .then(
-        //   personService
-        //     .getAllPersons()
-        //     .then(response => {
-        //       console.log(response.data)
-        //       setPersons(response.data)
-        //     })
-        // )
     }
 
-    console.log(`${name} with ${id} option checked`);
+    // console.log(`${name} with ${id} option checked`);
     
   }
   const personsToShow = filterNumbers 
