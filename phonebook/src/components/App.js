@@ -23,15 +23,18 @@ const PersonForm = ({addData, newName, newNumber, handleNewName, handleNewNumber
     </form>
 )
 
-const Persons = ({persons}) => {
-  return (
-    persons.map(person =>
-      <p key={person.name}>
-        {person.name} {person.number}
-      </p>
-    )
-  )
-}
+const Person = ({name, number, deletePrompt}) => (
+  <li>{name} {number} <button onClick={deletePrompt}>delete</button></li>
+)
+
+// const Persons = ({persons, setPersons}) => {
+
+  
+//   return (
+//     <div>
+//     </div>
+//   )
+// }
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
@@ -57,11 +60,6 @@ const App = () => {
       name: newName,
       number: newNumber,
     }
-    personService
-      .addPerson(nameObject)
-      .then(response => {
-        // console.log(response);
-      })
 
     // can't compare objects directly in JS!!!
     // can use JSON.stringify if you really want to use includes/some methods
@@ -73,10 +71,16 @@ const App = () => {
       }
     }
 
-    !alreadyInPersons
-     ? setPersons(persons.concat(nameObject))
-     : alert(`${nameObject.name} is already added to phonebook`)
-
+    if (!alreadyInPersons) {
+      personService
+        .addPerson(nameObject)
+        .then(response => {setPersons(persons.concat(response.data))})
+      // setPersons(persons.concat(nameObject))
+      // console.log("persons:", persons)
+      // console.log("hey")
+    } else {
+      alert(`${nameObject.name} is already added to phonebook`)
+    }
 
     setNewName('')
     setNewNumber('')
@@ -92,9 +96,7 @@ const App = () => {
   }
 
   
-  const personsToShow = filterNumbers 
-    ? persons.filter(person => person.name.toLowerCase().includes(searchString))
-    : persons 
+  
   // console.log(persons);
   
   const handleSearchString = (event) => {
@@ -108,6 +110,34 @@ const App = () => {
     
     // setPersons(personsToShow)
   }
+  
+  const deletePrompt = (id, name) => {
+    // console.log(person)
+    if (window.confirm(`Delete ${name} ?`)) {
+      personService.deletePerson(id)
+      setPersons(persons.filter(person => person.id !== id))
+      // personService
+      //   .deletePerson(id)
+      //   .then(response => {
+      //     console.log("response data:", response.data)
+      //     setPersons(response.data)
+      //   })
+        // .then(
+        //   personService
+        //     .getAllPersons()
+        //     .then(response => {
+        //       console.log(response.data)
+        //       setPersons(response.data)
+        //     })
+        // )
+    }
+
+    console.log(`${name} with ${id} option checked`);
+    
+  }
+  const personsToShow = filterNumbers 
+    ? persons.filter(person => person.name.toLowerCase().includes(searchString))
+    : persons 
   
   // be aware that var on left of equals (eg. searchString) is the prop var
   // and the value it is being set to is the searchString in App component
@@ -124,7 +154,18 @@ const App = () => {
         handleNewNumber={handleNewNumber}
       />
       <h2>Numbers</h2>
-      <Persons persons={personsToShow}/>
+      <div>
+        <ul>
+          {personsToShow.map((person, i) =>
+            <Person 
+            key={i}
+            name={person.name}
+            number={person.number} 
+            deletePrompt={() => deletePrompt(person.id, person.name)}
+          />
+          )}
+        </ul>
+      </div>
     </div>
   )
 }
