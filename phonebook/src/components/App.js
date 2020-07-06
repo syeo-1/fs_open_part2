@@ -69,11 +69,9 @@ const App = () => {
         setPersons(response.data)
       })
   }, [])
-  // console.log('render', persons.length, 'persons')
 
   const addData = (event) => {
     event.preventDefault()
-    //console.log('button click', event.target);
     const nameObject = {
       name: newName,
       number: newNumber,
@@ -101,7 +99,6 @@ const App = () => {
         )
     } else {
       if (window.confirm(`${nameObject.name} is already added to phonebook. Replace the old number with a new one?`)) {
-        // find the correct id to update
         // console.log(persons);
         const idToUpdate = persons.find(person => person.name === nameObject.name).id
         // console.log(idToUpdate);
@@ -136,20 +133,12 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
-  
-  
-  // console.log(persons);
-  
   const handleSearchString = (event) => {
     // console.log(event.target.value);
     setSearchString(event.target.value)
 
     searchString.length === 0 ? setFilterNumbers(false) : setFilterNumbers(true)
-    
-    
     // console.log("persons to show", personsToShow);
-    
-    // setPersons(personsToShow)
   }
   
   const deletePrompt = (id, name) => {
@@ -159,8 +148,6 @@ const App = () => {
       setPersons(persons.filter(person => person.id !== id))
     }
 
-    // console.log(`${name} with ${id} option checked`);
-    
   }
   const personsToShow = filterNumbers 
     ? persons.filter(person => person.name.toLowerCase().includes(searchString))
