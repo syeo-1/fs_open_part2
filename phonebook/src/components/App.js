@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import personService from './persons'
+import '../index.css'
 
 const Filter = ({searchString, handleSearchString}) => (
   <form>
@@ -27,14 +28,29 @@ const Person = ({name, number, deletePrompt}) => (
   <li>{name} {number} <button onClick={deletePrompt}>delete</button></li>
 )
 
-// const Persons = ({persons, setPersons}) => {
+const AddNotification = ({message}) => {
+   if (message === null) {
+     return null
+   }
 
-  
-//   return (
-//     <div>
-//     </div>
-//   )
-// }
+   return (
+     <div className="add">
+       {message}
+     </div>
+   )
+}
+
+const ErrorNotification = ({message}) => {
+   if (message === null) {
+     return null
+   }
+
+   return (
+     <div className="error">
+       {message}
+     </div>
+   )
+}
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
@@ -42,6 +58,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filterNumbers, setFilterNumbers] = useState(true)
   const [searchString, setSearchString] = useState('')
+  const [addMessage, setAddMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     // console.log('effect')
@@ -75,9 +93,12 @@ const App = () => {
       personService
         .addPerson(nameObject)
         .then(response => {setPersons(persons.concat(response.data))})
-      // setPersons(persons.concat(nameObject))
-      // console.log("persons:", persons)
-      // console.log("hey")
+        .then(
+          setAddMessage(`Added ${nameObject.name}`),
+          setTimeout(() => {
+            setAddMessage(null)
+          }, 5000)
+        )
     } else {
       if (window.confirm(`${nameObject.name} is already added to phonebook. Replace the old number with a new one?`)) {
         // find the correct id to update
@@ -89,6 +110,15 @@ const App = () => {
             // console.log(response.data);
             setPersons(persons
               .map(person => person.id === idToUpdate ? response.data : person))
+          })
+          .catch(error => {
+            setErrorMessage(
+              `Information of ${nameObject.name} has already been removed from server`
+            )
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
+            // console.log(error)
           })
       }
     }
@@ -141,6 +171,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <AddNotification message={addMessage}/>
+      <ErrorNotification message={errorMessage}/>
       <Filter searchString={searchString} handleSearchString={handleSearchString}/>
       <h2>add a new</h2>
       <PersonForm 
