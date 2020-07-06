@@ -16,7 +16,7 @@ const CountryFilter = ({countryString, handleCountrySearch, numMatches}) => {
 const CountryData = ({countryNames, countries}) => {
   if (countryNames.length === 1) {
     const countryData = countries.filter(country => country.name === countryNames[0])[0]
-    console.log('countryData', countryData);
+    // console.log('countryData', countryData);
     
     return (
         <div>
@@ -36,9 +36,9 @@ const CountryData = ({countryNames, countries}) => {
     return (
         countryNames.map(country => {
           return(
-            <div>
+            <div key={country}>
               {country}
-              <button>show</button>
+              {/* <button>show</button> */}
             </div>
         )})
     )
